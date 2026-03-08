@@ -19,6 +19,11 @@ pub mod music_streaming {
     }
 
     pub fn agregar_cancion(context: Context<NuevaCancion>, nombre: String, genero: String, artista: String) -> Result<()> {
+        require!( 
+            context.accounts.streaming.owner == context.accounts.owner.key(),
+            Errores::NoEresElOwner
+        );
+        
         let cancion = Song {
             nombre,
             genero,
@@ -32,12 +37,22 @@ pub mod music_streaming {
     }
 
     pub fn ver_cancion(context: Context<NuevaCancion>) -> Result<()>{
+        require!( 
+            context.accounts.streaming.owner == context.accounts.owner.key(),
+            Errores::NoEresElOwner
+        );
+        
         msg!("La lista de canciones es: {:#?}", context.accounts.streaming.canciones);
 
         Ok(())
     }
     
     pub fn eliminar_cancion(context: Context<NuevaCancion>, nombre:String) -> Result<()>{
+        require!( 
+            context.accounts.streaming.owner == context.accounts.owner.key(),
+            Errores::NoEresElOwner
+        );
+
         let canciones = &mut context.accounts.streaming.canciones;
 
         for i in 0..canciones.len() {
@@ -52,6 +67,11 @@ pub mod music_streaming {
     }
 
     pub fn alternar_cancion(context:Context<NuevaCancion>, nombre:String) -> Result<()>{
+        require!( 
+            context.accounts.streaming.owner == context.accounts.owner.key(),
+            Errores::NoEresElOwner
+        );
+        
         let canciones = &mut context.accounts.streaming.canciones;
 
         for i in 0..canciones.len() {
